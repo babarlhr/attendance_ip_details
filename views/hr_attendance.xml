@@ -7,11 +7,22 @@
             <field name="inherit_id" ref="hr_attendance.hr_attendance_view_form"/>
             <field name="arch" type="xml">
                 <xpath expr="//field[@name='check_out']" position="after">
-                    <field name="user_location"/>
-                    <field name="user_last_logged_browser"/>
-                    <field name="user_last_logged_os"/>
-                    <field name="user_ip_address"/>
-                    <field name="mac_address"/>
+                    <group string="CheckIn Info">
+                        <field name="user_location"/>
+                        <field name="user_last_logged_browser"/>
+                        <field name="user_last_logged_os"/>
+                        <field name="user_ip_address"/>
+                        <field name="mac_address"/>
+                        <field name="custom_device_user_agent"/>
+                    </group>
+                    <group string="CheckOut Info">
+                        <field name="user_location_checkout"/>
+                        <field name="user_last_logged_browser_checkout"/>
+                        <field name="user_last_logged_os_checkout"/>
+                        <field name="user_ip_address_checkout"/>
+                        <field name="mac_address_checkout"/>
+                        <field name="custom_device_user_agent_checkout"/>
+                    </group>
                 </xpath>
             </field>
         </record>

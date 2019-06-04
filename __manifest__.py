@@ -3,7 +3,7 @@
 # Part of Probuse Consulting Service Pvt Ltd. See LICENSE file for full copyright and licensing details.
 {
     'name': "Attendance IP Details",
-    'version': '1.0',
+    'version': '1.1',
     'license': 'Other proprietary',
     'author': "Probuse Consulting Service Pvt. Ltd.",
     'website': "www.probuse.com",
