@@ -4,10 +4,11 @@ from odoo import api, fields, models
 import requests
 from odoo.http import request
 from odoo import http
-import uuid 
+import uuid , re
 import os
 import platform
 import socket
+
 
 
 class HrAttendance(models.Model):
@@ -88,12 +89,13 @@ class HrAttendance(models.Model):
                 try:
                     browser_name = request.httprequest.user_agent.browser
         #             request_ip = http.request.httprequest.remote_addr
-                    custom_mac = hex(uuid.getnode())
-                    base_url = self.env['ir.config_parameter'].get_param('web.base.url')
-                    gw = os.popen("ip -4 route show default").read().split()
-                    s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-                    s.connect((gw[2], 0))
-                    ipaddr = s.getsockname()[0]
+                    custom_mac = ':'.join(re.findall('..', '%012x' % uuid.getnode()))
+
+                    # base_url = self.env['ir.config_parameter'].get_param('web.base.url')
+                    # gw = os.popen("ip -4 route show default").read().split()
+                    # s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+                    # s.connect((gw[2], 0))
+                    # ipaddr = s.getsockname()[0]
                     
                     wsgienv = request.httprequest.environ
                     env = dict(
@@ -116,7 +118,7 @@ class HrAttendance(models.Model):
                     result.user_ip_address_checkout = ipaddress
                     result.user_last_logged_browser_checkout = browser_name
                     result.mac_address_checkout = custom_mac
-                    result.user_last_logged_os_checkout = platform.system()
+                    # result.user_last_logged_os_checkout = platform.system()
                     result.user_api_checkout = js
                     result.custom_device_user_agent_checkout = http.request.httprequest.user_agent or ''
                 except:
@@ -129,12 +131,13 @@ class HrAttendance(models.Model):
         try:
             browser_name = request.httprequest.user_agent.browser
 #             request_ip = http.request.httprequest.remote_addr
-            custom_mac = hex(uuid.getnode())
-            base_url = self.env['ir.config_parameter'].get_param('web.base.url')
-            gw = os.popen("ip -4 route show default").read().split()
-            s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-            s.connect((gw[2], 0))
-            ipaddr = s.getsockname()[0]
+            # custom_mac = hex(uuid.getnode())
+            custom_mac = ':'.join(re.findall('..', '%012x' % uuid.getnode()))
+            # base_url = self.env['ir.config_parameter'].get_param('web.base.url')
+            # gw = os.popen("ip -4 route show default").read().split()
+            # s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+            # s.connect((gw[2], 0))
+            # ipaddr = s.getsockname()[0]
             
             wsgienv = request.httprequest.environ
             env = dict(
@@ -142,7 +145,6 @@ class HrAttendance(models.Model):
              REMOTE_ADDR=wsgienv['REMOTE_ADDR'],
              )
             ipaddress = env['REMOTE_ADDR']
-            
             
             url = 'http://ip-api.com/json/'
             r = requests.get(url)
@@ -152,13 +154,13 @@ class HrAttendance(models.Model):
             regionname = js['regionName']
             country = js['country']
             address = city + ', ' + regionname +', ' + zip + ', ' + country
-            
+
             result.user_location = address
             result.user_id = self.env.user.id
             result.user_ip_address = ipaddress
             result.user_last_logged_browser = browser_name
             result.mac_address = custom_mac
-            result.user_last_logged_os = platform.system()
+            # result.user_last_logged_os = platform.system()
             result.user_api = js
             result.custom_device_user_agent = http.request.httprequest.user_agent or ''
         except:
